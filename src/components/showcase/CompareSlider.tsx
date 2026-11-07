@@ -91,7 +91,7 @@ export function CompareSlider({
       </span>
 
       <div className="pointer-events-none absolute inset-y-0" style={{ left: `${value}%` }}>
-        <div className="absolute inset-y-0 -left-px w-[2px] bg-porcelain-50 shadow-[0_0_0_1px_rgba(13,47,53,0.12)]" />
+        <div className="scan-line-v absolute inset-y-0 -left-px w-[2px]" />
         <div
           ref={handleRef}
           role="slider"

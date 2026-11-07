@@ -7,6 +7,7 @@ import { useSite } from "@/components/providers/SiteProvider";
 import { Icon } from "@/components/ui/Icon";
 import { Reveal, RevealHeading } from "@/components/ui/Reveal";
 import { oneTime, oneTimeMoments, recurring, recurringNote, type VisitOption } from "@/content/visits";
+import { Gleam } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
@@ -57,7 +58,8 @@ export function VisitsSection() {
   const radioRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const onKey = (e: KeyboardEvent, index: number) => {
-    const delta = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
+    const delta =
+      e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
     if (!delta) return;
     e.preventDefault();
     const next = recurring[(index + delta + recurring.length) % recurring.length];
@@ -78,12 +80,7 @@ export function VisitsSection() {
           <RevealHeading
             id="visits-heading"
             className="display-lg mt-5 text-petrol-900"
-            lines={[
-              "A clean that fits",
-              <em key="i" className="serif-italic text-petrol-700">
-                your routine.
-              </em>,
-            ]}
+            lines={["A clean that fits", <Gleam key="i">your routine.</Gleam>]}
           />
           <Reveal delay={0.12}>
             <p className="mt-6 max-w-sm text-[1.02rem] leading-relaxed text-ink-muted">
@@ -186,9 +183,7 @@ export function VisitsSection() {
             <button
               type="button"
               className="btn btn-light mt-8 w-full sm:w-auto sm:self-start"
-              onClick={() =>
-                planClean({ frequency: active.id, note: `${active.label} visits selected.` })
-              }
+              onClick={() => planClean({ frequency: active.id, note: `${active.label} visits selected.` })}
             >
               Start {active.label.toLowerCase()} visits
               <Icon name="arrow" size={18} className="btn-arrow" />

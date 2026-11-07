@@ -535,3 +535,174 @@ html.scroll-locked {
   background-size: 44px 44px;
   box-shadow: inset 0 0 120px rgb(10 38 43 / 0.18);
 }
+
+/* ------------------------------------------------------------------
+   Scan and clean (hero). The grime is a visual effect over the real
+   photo; with reduced motion the room is simply shown clean.
+------------------------------------------------------------------- */
+.scan-clean-photo {
+  filter: saturate(1.08) contrast(1.03) brightness(1.03);
+}
+.scan-dirty-photo {
+  filter: grayscale(0.55) sepia(0.4) saturate(0.75) brightness(0.62) contrast(0.84) blur(0.7px);
+}
+.scan-haze {
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgb(120 104 78 / 0.1), rgb(40 34 26 / 0.45)),
+    linear-gradient(180deg, rgb(96 84 64 / 0.22), rgb(58 50 38 / 0.34));
+  mix-blend-mode: multiply;
+}
+.scan-line {
+  background: linear-gradient(90deg, transparent, #f4fbf8 12%, #ffffff 50%, #f4fbf8 88%, transparent);
+  box-shadow:
+    0 0 10px 2px rgb(201 230 218 / 0.95),
+    0 0 34px 8px rgb(175 201 189 / 0.55),
+    0 0 90px 20px rgb(236 211 164 / 0.25);
+}
+.scan-band {
+  background:
+    repeating-linear-gradient(180deg, rgb(230 245 238 / 0.18) 0 1px, transparent 1px 6px),
+    linear-gradient(0deg, rgb(201 230 218 / 0.35), rgb(201 230 218 / 0));
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.scan-dot {
+  animation: scan-dot 0.9s ease-in-out infinite alternate;
+}
+@keyframes scan-dot {
+  from { opacity: 0.35; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan-dirty { display: none; }
+}
+
+/* ------------------------------------------------------------------
+   Gleam: a light passes through italic heading words once revealed
+------------------------------------------------------------------- */
+.gleam {
+  --g: var(--color-petrol-700);
+  --g-hi: #fff6e2;
+  background-image: linear-gradient(110deg, var(--g) 0 40%, var(--g-hi) 50%, var(--g) 60% 100%);
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.06em;
+}
+.on-dark .gleam {
+  --g: var(--color-seaglass-200);
+  --g-hi: #ffffff;
+}
+.gleam[data-run="true"] {
+  animation: gleam 1.7s var(--ease-in-out-soft) 0.55s both;
+}
+@keyframes gleam {
+  from { background-position: 100% 0; }
+  to { background-position: 0% 0; }
+}
+
+/* ------------------------------------------------------------------
+   Nav lightning: when the bar moves, an electric arc races around its
+   outline (two sparks from opposite corners), with a brief flicker.
+   The ring is masked to a 1.5px border so it follows any radius.
+------------------------------------------------------------------- */
+@property --arc { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+.nav-bolt {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  /* glow lives on this outer layer so the mask below does not clip it */
+  filter: drop-shadow(0 0 3px rgb(244 196 100 / 1)) drop-shadow(0 0 12px rgb(224 168 75 / 0.85))
+    drop-shadow(0 0 26px rgb(95 181 154 / 0.55));
+}
+.nav-bolt-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2.5px;
+  background: conic-gradient(
+    from var(--arc),
+    transparent 0deg,
+    transparent 80deg,
+    rgb(224 168 75 / 0) 90deg,
+    rgb(224 168 75 / 0.75) 140deg,
+    #f2c46c 166deg,
+    #fffbea 177deg,
+    transparent 180deg,
+    transparent 272deg,
+    rgb(95 181 154 / 0) 270deg,
+    rgb(95 181 154 / 0.75) 320deg,
+    #7fd6b8 346deg,
+    #f4fffb 357deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.nav-bolt[data-run="true"] .nav-bolt-ring {
+  animation: nav-arc 1.15s cubic-bezier(0.55, 0, 0.25, 1) both;
+}
+.nav-bolt[data-run="true"] {
+  animation: nav-flicker 1.15s linear both;
+}
+.nav-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow:
+    0 0 0 1.5px rgb(224 168 75 / 0.9),
+    0 0 36px 6px rgb(224 168 75 / 0.4),
+    inset 0 0 22px rgb(240 190 95 / 0.22);
+}
+.nav-glow[data-run="true"] {
+  animation: nav-glow 1.15s ease-out both;
+}
+@keyframes nav-arc {
+  from { --arc: 0deg; }
+  to { --arc: 360deg; }
+}
+@keyframes nav-flicker {
+  0% { opacity: 0; }
+  5% { opacity: 1; }
+  9% { opacity: 0.25; }
+  13% { opacity: 1; }
+  17% { opacity: 0.5; }
+  21%, 82% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes nav-glow {
+  0%, 100% { opacity: 0; }
+  12% { opacity: 1; }
+  40% { opacity: 0.35; }
+}
+
+/* Vertical scan line, used on image reveals, the services swap, the slider and the footer */
+.scan-line-v {
+  background: linear-gradient(180deg, transparent, #f4fbf8 12%, #ffffff 50%, #f4fbf8 88%, transparent);
+  box-shadow:
+    0 0 10px 2px rgb(201 230 218 / 0.9),
+    0 0 30px 6px rgb(175 201 189 / 0.45);
+}
+
+/* Pointer light on dark panels */
+.pointer-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  background: radial-gradient(460px circle at var(--px, 50%) var(--py, 50%), rgb(201 230 218 / 0.11), transparent 62%);
+  transition: opacity 0.6s var(--ease-out-quint);
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type HTMLMotionProps } from "motion/react";
+import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
 import type { ReactNode } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -29,39 +29,55 @@ export function Reveal({
 }
 
 /**
- * Images open with a short vertical wipe and settle from a slight zoom,
- * echoing the reset motion without competing with it.
+ * Images are scanned into view: a beam travels across the frame and the
+ * picture is revealed behind it, settling from a slight zoom. The same
+ * motif as the hero, at a smaller scale. Reduced motion shows them at once.
  */
 export function RevealMedia({
   children,
   delay = 0,
-  className,
-  from = "bottom",
+  className = "",
+  from = "top",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
-  from?: "bottom" | "left" | "right";
+  from?: "top" | "left";
 }) {
-  const start =
-    from === "left" ? "inset(0% 100% 0% 0%)" : from === "right" ? "inset(0% 0% 0% 100%)" : "inset(18% 0% 0% 0%)";
+  const reduce = useReducedMotion();
+  if (reduce) return <div className={`relative ${className}`}>{children}</div>;
+  const vertical = from === "top";
+  const hidden = vertical ? "inset(0% 0% 100% 0%)" : "inset(0% 100% 0% 0%)";
+  const wipe = { duration: 1.25, delay, ease: [0.6, 0, 0.3, 1] as const };
   return (
-    <motion.div
-      className={className}
-      initial={{ clipPath: start, opacity: from === "bottom" ? 0 : 1 }}
-      whileInView={{ clipPath: "inset(0% 0% 0% 0%)", opacity: 1 }}
-      viewport={VIEWPORT}
-      transition={{ duration: 1.05, delay, ease: EASE }}
-    >
+    <motion.div className={`relative ${className}`} initial="hidden" whileInView="shown" viewport={VIEWPORT}>
       <motion.div
         className="relative h-full w-full"
-        initial={{ scale: 1.06 }}
-        whileInView={{ scale: 1 }}
-        viewport={VIEWPORT}
-        transition={{ duration: 1.4, delay, ease: EASE }}
+        variants={{ hidden: { clipPath: hidden }, shown: { clipPath: "inset(0% 0% 0% 0%)", transition: wipe } }}
       >
-        {children}
+        <motion.div
+          className="relative h-full w-full"
+          variants={{ hidden: { scale: 1.07 }, shown: { scale: 1, transition: { duration: 1.6, delay, ease: EASE } } }}
+        >
+          {children}
+        </motion.div>
       </motion.div>
+      <motion.span
+        aria-hidden="true"
+        className={`pointer-events-none absolute z-10 ${vertical ? "scan-line inset-x-0 h-[2px]" : "scan-line-v inset-y-0 w-[2px]"}`}
+        variants={{
+          hidden: vertical ? { top: "0%", opacity: 0 } : { left: "0%", opacity: 0 },
+          shown: {
+            ...(vertical ? { top: "100%" } : { left: "100%" }),
+            opacity: [0, 1, 1, 0],
+            transition: {
+              top: wipe,
+              left: wipe,
+              opacity: { duration: wipe.duration, delay, times: [0, 0.1, 0.85, 1] },
+            },
+          },
+        }}
+      />
     </motion.div>
   );
 }

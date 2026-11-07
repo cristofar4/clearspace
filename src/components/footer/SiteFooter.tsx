@@ -10,6 +10,7 @@ import { photoCredits } from "@/content/media";
 import { services, type ServiceId } from "@/content/services";
 import { primaryNav, site } from "@/content/site";
 import { useClientValue } from "@/lib/hooks";
+import { PointerGlow, ScannedWordmark } from "@/components/ui/Motion";
 
 export function SiteFooter() {
   const { showService } = useSite();
@@ -22,20 +23,23 @@ export function SiteFooter() {
 
   const contact = [
     site.contact.email && { label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}` },
-    site.contact.phone && { label: "Phone", value: site.contact.phone, href: `tel:${site.contact.phone.replace(/\s/g, "")}` },
+    site.contact.phone && {
+      label: "Phone",
+      value: site.contact.phone,
+      href: `tel:${site.contact.phone.replace(/\s/g, "")}`,
+    },
     site.contact.serviceArea && { label: "Area", value: site.contact.serviceArea },
     site.contact.hours && { label: "Hours", value: site.contact.hours },
   ].filter(Boolean) as { label: string; value: string; href?: string }[];
 
   return (
-    <footer className="on-dark bg-petrol-900 text-porcelain-50">
-      <div className="container-cs py-14 lg:py-20">
+    <footer className="on-dark relative overflow-hidden bg-petrol-900 text-porcelain-50">
+      <PointerGlow />
+      <div className="container-cs relative py-14 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Wordmark tone="light" />
-            <p className="mt-6 max-w-sm font-display text-[1.6rem] leading-snug text-porcelain-50/90">
-              {site.tagline}
-            </p>
+            <p className="mt-6 max-w-sm font-display text-[1.6rem] leading-snug text-porcelain-50/90">{site.tagline}</p>
             <a href="#book" className="btn btn-light mt-8">
               Book a clean
               <Icon name="arrow" size={18} className="btn-arrow" />
@@ -48,7 +52,11 @@ export function SiteFooter() {
               <ul className="mt-5 space-y-3 text-[0.95rem]">
                 {services.map((s) => (
                   <li key={s.id}>
-                    <a href="#services" onClick={(e) => pick(e, s.id)} className="link-underline text-porcelain-50/80 hover:text-porcelain-50">
+                    <a
+                      href="#services"
+                      onClick={(e) => pick(e, s.id)}
+                      className="link-underline text-porcelain-50/80 hover:text-porcelain-50"
+                    >
                       {s.name}
                     </a>
                   </li>
@@ -105,7 +113,11 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-porcelain-50/12 pt-6 text-[0.8rem] text-porcelain-50/70 md:flex-row md:items-start md:justify-between">
+        <div className="mt-14 lg:mt-20">
+          <ScannedWordmark text={site.wordmark} />
+        </div>
+
+        <div className="mt-8 flex flex-col gap-4 border-t border-porcelain-50/12 pt-6 text-[0.8rem] text-porcelain-50/70 md:flex-row md:items-start md:justify-between">
           <p>
             © {year} {site.name}
             {bookingMode === "demo" && <span> · Demo site. Bookings are not live.</span>}
@@ -119,7 +131,12 @@ export function SiteFooter() {
               Photographs via Unsplash by{" "}
               {photoCredits.map((c, i) => (
                 <span key={c.name}>
-                  <a href={c.url} className="underline decoration-porcelain-50/30 underline-offset-2 hover:text-porcelain-50" target="_blank" rel="noreferrer">
+                  <a
+                    href={c.url}
+                    className="underline decoration-porcelain-50/30 underline-offset-2 hover:text-porcelain-50"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {c.name}
                   </a>
                   {i < photoCredits.length - 2 ? ", " : i === photoCredits.length - 2 ? " and " : "."}

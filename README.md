@@ -1,9 +1,10 @@
 # CLEARSPACE
 
 A premium cleaning company website built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4 and Motion.
-One page, six sections, a signature interaction called **The Clearspace route** (a guided clean through a real
-kitchen photograph), a blinking indicator light in the navigation, and a four step booking flow that is honest
-about being a demo until a backend is connected.
+One page, six sections and a signature hero: a real kitchen that arrives dirty, is **scanned clean** top to
+bottom, then walked through stop by stop as **the Clearspace route**. The navigation throws lightning around its
+outline whenever it moves, a light runs through the whole site, and a four step booking flow stays honest about
+being a demo until a backend is connected.
 
 ```bash
 npm install
@@ -51,7 +52,16 @@ navbar previews (annotations, not page sections).
 - **Copy:** short, natural, and free of hyphens in visible text. No reviews, certifications, statistics, prices or
   contact details were invented. Prices show "Tailored quote" until set.
 
-## 3. The Clearspace route
+## 3. Scan and clean, then the Clearspace route
+
+**Scan and clean.** On arrival the kitchen photo sits under a grime film: a dull, dim, hazy treatment with
+stains, specks, smeared glass and dust hanging in the air (`src/components/hero/ScanLayers.tsx`). A scanning beam
+sweeps from top to bottom, the same order we clean in, and names each surface as it reaches it. Behind the beam
+the room comes up clean: full colour and clarity, the dust lifts and dissolves, a soft bloom of light follows and
+reflective surfaces glint. A readout counts the scan and ends on "Room reset". Then the route begins. A scan button
+in the panel replays it, and choosing any stop mid scan finishes the clean at once. The grime is a visual effect
+over one real photograph, not a photo of a real job, and reduced motion shows the room clean from the start.
+
 
 The hero is a real kitchen photograph (`src/content/route.ts`). A Clearspace kitchen clean is shown in the order
 professionals work: top to bottom, dry before wet, finishing at the door.
@@ -84,6 +94,13 @@ Real photographs of a kitchen, a bathroom and a living room. The accessible slid
 Page Up, Page Down, Home, End) compares what a regular clean covers on the left with what a deep clean adds on the
 right, marked on the same photo. It compares scope, so one honest photo per room is enough. `src/content/showcase.ts`
 also accepts true before and after pairs (`kind: "photo"`).
+
+### Lightning in the navigation
+
+Whenever the bar moves (contracting or expanding with scroll, or as you pass into a new section), a strike of
+light flashes around its outline and two sparks, gold and sea glass, race around the edge from opposite sides with
+a brief electric flicker. It follows the bar's exact shape at any width and radius, and it is decorative only
+(reduced motion turns it off).
 
 ### The Clearspace light
 
@@ -152,7 +169,21 @@ availability, fetch it into the date step and keep the server as the source of t
 
 ## 7. Motion system
 
-One library (Motion) plus CSS transitions. Shared easing `cubic-bezier(0.22, 1, 0.36, 1)`. Headings rise line by line
+One idea runs through every effect: light that scans, reveals and cleans.
+
+- **Hero:** grime, scan beam, dissolving dust, bloom and glints, then the route with its travelling light.
+- **Navigation:** lightning around the outline on every move; the Book light blinks in short bursts.
+- **Images:** every photograph is scanned into view by a beam rather than faded in, and settles from a slight zoom.
+- **Headings:** a gleam of light passes through the italic word once it arrives; the hero's "We reset" gleams
+  the moment the room comes clean.
+- **Services:** each new photo wipes across with a scan line on its leading edge.
+- **Dark panels:** a soft light follows the pointer (hover devices only).
+- **Depth:** photographs drift a few percent against the scroll.
+- **Comparison:** the divider is a live scan line.
+- **Footer:** the large wordmark is scanned from dusty to crisp as it comes into view.
+
+
+Implementation: one library (Motion) plus CSS transitions and one small canvas for dust. Shared easing `cubic-bezier(0.22, 1, 0.36, 1)`. Headings rise line by line
 from a mask; images open with a short clip wipe and settle from a slight zoom; service photos wipe left to right;
 the route light travels and draws its path; tab indicators glide between items; booking steps slide in the direction
 of travel while the progress line fills. Buttons press 1px with a small arrow nudge. No scroll hijacking, preloader
@@ -162,7 +193,11 @@ smooth scrolling; all content stays.
 
 ## 8. What was verified
 
-Automated Playwright checks (84) and an axe-core audit (no violations at 1440px or 390px):
+Automated Playwright checks (91) and an axe-core audit (no violations at 1440px or 390px):
+
+- the hero starts dirty, the scan sweeps and finishes clean, stop markers appear afterwards, and the route then
+  autoplays; reduced motion shows the room clean with no grime, readout or autoplay;
+- the navigation lightning runs when the bar moves;
 
 - nav width at top (94vw) and after scroll (78vw), animated monotonically, hysteresis with no toggling near the
   threshold, smooth reversal, zero layout shift; nav light blinks in bursts under five seconds and turns sea glass

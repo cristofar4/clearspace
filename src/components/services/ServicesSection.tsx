@@ -9,6 +9,7 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { Reveal, RevealHeading } from "@/components/ui/Reveal";
 import { serviceById, services, type Service, type ServiceId } from "@/content/services";
 import { frequencyLabel } from "@/content/visits";
+import { Gleam, PointerGlow } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -31,6 +32,18 @@ function ServicePhoto({ service, priority }: { service: Service; priority: boole
       exit={{ opacity: 0.999, transition: { duration: 0.95 } }}
       transition={{ duration: 0.95, ease: [0.65, 0, 0.35, 1] }}
     >
+      {isPresent && (
+        <motion.span
+          aria-hidden="true"
+          className="scan-line-v pointer-events-none absolute inset-y-0 z-10 w-[2px]"
+          initial={{ left: "0%", opacity: 0 }}
+          animate={{ left: "100%", opacity: [0, 1, 1, 0] }}
+          transition={{
+            left: { duration: 0.95, ease: [0.65, 0, 0.35, 1] },
+            opacity: { duration: 0.95, times: [0, 0.08, 0.85, 1] },
+          }}
+        />
+      )}
       <motion.div
         className="relative h-full w-full"
         initial={{ scale: 1.08 }}
@@ -77,6 +90,7 @@ export function ServicesSection() {
     <section id="services" aria-labelledby="services-heading" className="scroll-mt-24 py-14 lg:py-20">
       <div className="container-cs">
         <div className="on-dark relative overflow-hidden rounded-[var(--radius-panel)] bg-petrol-800 text-porcelain-50">
+          <PointerGlow />
           {/* a single quiet diagonal, echoing the wipe */}
           <div
             aria-hidden="true"
@@ -95,12 +109,7 @@ export function ServicesSection() {
                 <RevealHeading
                   id="services-heading"
                   className="display-lg mt-5 text-porcelain-50"
-                  lines={[
-                    "Different spaces.",
-                    <em key="i" className="serif-italic text-seaglass-200">
-                      One thoughtful standard.
-                    </em>,
-                  ]}
+                  lines={["Different spaces.", <Gleam key="i">One thoughtful standard.</Gleam>]}
                 />
 
                 <div

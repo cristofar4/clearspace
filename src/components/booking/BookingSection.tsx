@@ -10,6 +10,7 @@ import { bookingMode } from "@/content/booking";
 import { media } from "@/content/media";
 import { summaryRows } from "@/lib/booking";
 import { BookingForm } from "./BookingForm";
+import { Gleam, Parallax } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -32,15 +33,17 @@ function Summary() {
       className="on-dark overflow-hidden rounded-[var(--radius-panel)] bg-petrol-800 text-porcelain-50 lg:sticky lg:top-24"
     >
       <div className="relative aspect-[16/9] lg:aspect-[16/8]">
-        <Image
-          src={media.bookingCalmRoom.src}
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 34vw, 100vw"
-          placeholder="blur"
-          className="object-cover"
-          style={{ objectPosition: media.bookingCalmRoom.focus }}
-        />
+        <Parallax amount={5}>
+          <Image
+            src={media.bookingCalmRoom.src}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 34vw, 100vw"
+            placeholder="blur"
+            className="object-cover"
+            style={{ objectPosition: media.bookingCalmRoom.focus }}
+          />
+        </Parallax>
         <div className="absolute inset-0 bg-gradient-to-t from-petrol-800 via-petrol-800/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6">
           <p className="font-display text-[1.6rem] leading-none">Your clean</p>
@@ -106,7 +109,7 @@ export function BookingSection() {
               className="display-lg mt-5 text-petrol-900 outline-none"
               lines={[
                 <>
-                  Make room for <em className="serif-italic text-petrol-700">yourself.</em>
+                  Make room for <Gleam>yourself.</Gleam>
                 </>,
               ]}
             />

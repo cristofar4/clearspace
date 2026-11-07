@@ -9,6 +9,7 @@ import { Reveal, RevealHeading, RevealMedia } from "@/components/ui/Reveal";
 import { media } from "@/content/media";
 import { showcaseEntries, type Pin, type ShowcaseEntry } from "@/content/showcase";
 import { CompareSlider } from "./CompareSlider";
+import { Gleam } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const FRAME = 3 / 2;
@@ -27,7 +28,17 @@ function mapPin(pin: Pin, img: StaticImageData) {
   return { x: pin.x, y: (pin.y / 100) * scale * 100 - ((scale - 1) / 2) * 100 };
 }
 
-function PinMark({ pin, img, tone, labelled }: { pin: Pin; img: StaticImageData; tone: "regular" | "deep"; labelled: boolean }) {
+function PinMark({
+  pin,
+  img,
+  tone,
+  labelled,
+}: {
+  pin: Pin;
+  img: StaticImageData;
+  tone: "regular" | "deep";
+  labelled: boolean;
+}) {
   const p = mapPin(pin, img);
   const labelLeft = p.x > 62;
   return (
@@ -52,13 +63,23 @@ function PinMark({ pin, img, tone, labelled }: { pin: Pin; img: StaticImageData;
   );
 }
 
-function CoverageLayer({ entry, side }: { entry: Extract<ShowcaseEntry, { kind: "coverage" }>; side: "regular" | "deep" }) {
+function CoverageLayer({
+  entry,
+  side,
+}: {
+  entry: Extract<ShowcaseEntry, { kind: "coverage" }>;
+  side: "regular" | "deep";
+}) {
   const img = entry.photo.src;
   return (
     <div className="absolute inset-0">
       <Image
         src={img}
-        alt={side === "regular" ? `${entry.photo.alt}. Marked with what a regular clean covers.` : `${entry.photo.alt}. Marked with what a deep clean adds.`}
+        alt={
+          side === "regular"
+            ? `${entry.photo.alt}. Marked with what a regular clean covers.`
+            : `${entry.photo.alt}. Marked with what a deep clean adds.`
+        }
         fill
         sizes="(min-width: 1024px) 60vw, 100vw"
         placeholder="blur"
@@ -119,12 +140,7 @@ export function ShowcaseSection() {
             <RevealHeading
               id="difference-heading"
               className="display-lg mt-5 text-petrol-900"
-              lines={[
-                "Regular or deep?",
-                <em key="i" className="serif-italic text-petrol-700">
-                  See what changes.
-                </em>,
-              ]}
+              lines={["Regular or deep?", <Gleam key="i">See what changes.</Gleam>]}
             />
           </div>
           <Reveal className="lg:col-span-5 lg:pb-2" delay={0.1}>
@@ -211,7 +227,10 @@ export function ShowcaseSection() {
             aria-labelledby={`compare-tab-${entry.id}`}
             className="flex flex-col gap-6 lg:col-span-4"
           >
-            <Reveal delay={0.1} className="rounded-[var(--radius-card)] border border-petrol-800/10 bg-porcelain-50 p-6">
+            <Reveal
+              delay={0.1}
+              className="rounded-[var(--radius-card)] border border-petrol-800/10 bg-porcelain-50 p-6"
+            >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={entry.id}
@@ -254,7 +273,12 @@ export function ShowcaseSection() {
                       <ul className="mt-4 space-y-2.5">
                         {entry.notes.map((c) => (
                           <li key={c} className="flex gap-3 text-[0.95rem] text-petrol-900">
-                            <Icon name="check" size={17} strokeWidth={1.8} className="mt-0.5 shrink-0 text-seaglass-600" />
+                            <Icon
+                              name="check"
+                              size={17}
+                              strokeWidth={1.8}
+                              className="mt-0.5 shrink-0 text-seaglass-600"
+                            />
                             {c}
                           </li>
                         ))}
@@ -264,7 +288,11 @@ export function ShowcaseSection() {
                 </motion.div>
               </AnimatePresence>
             </Reveal>
-            <RevealMedia className="relative flex-1 overflow-hidden rounded-[var(--radius-card)]" from="left" delay={0.15}>
+            <RevealMedia
+              className="relative flex-1 overflow-hidden rounded-[var(--radius-card)]"
+              from="left"
+              delay={0.15}
+            >
               <div className="relative h-full min-h-[220px]">
                 <Image
                   src={media.showcaseDetail.src}

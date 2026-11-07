@@ -1,13 +1,16 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useState } from "react";
 
 import { Icon } from "@/components/ui/Icon";
 import { KitchenRoute } from "./KitchenRoute";
+import { Gleam } from "@/components/ui/Motion";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function Hero() {
+  const [gleam, setGleam] = useState(0);
   return (
     <section id="top" aria-labelledby="hero-heading" className="relative pt-[104px] pb-6 sm:pt-[118px] lg:pb-8">
       <div className="container-cs grid gap-y-10 lg:grid-cols-12 lg:gap-x-10 xl:gap-x-14">
@@ -25,9 +28,9 @@ export function Hero() {
           <h1 id="hero-heading" className="display-xl mt-6 text-petrol-900">
             {[
               <>Life happens.</>,
-              <em key="i" className="serif-italic text-petrol-700">
+              <Gleam key="i" trigger={gleam}>
                 We reset
-              </em>,
+              </Gleam>,
               <>the space.</>,
             ].map((line, i) => (
               <span key={i} className="block overflow-hidden pb-[0.1em] -mb-[0.1em]">
@@ -84,7 +87,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.2, ease: EASE }}
         >
-          <KitchenRoute />
+          <KitchenRoute onClean={() => setGleam((g) => g + 1)} />
         </motion.div>
       </div>
     </section>

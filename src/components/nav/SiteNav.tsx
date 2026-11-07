@@ -66,16 +66,22 @@ export function SiteNav() {
   const bookingStarted = Boolean(draft.service);
   // Each change of shape, section or booking choice gives the light a fresh burst
   const lightTrigger = `${compact}-${current}-${draft.service}-${draft.frequency}-${draft.focusRoom}`;
+  const boltTrigger = `${compact}-${current}`;
 
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-petrol-800 focus:px-4 focus:py-2 focus:text-porcelain-50"
-      >
-        Skip to content
-      </a>
       <header className="site-nav" data-compact={compact} aria-label="Site">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-petrol-800 focus:px-4 focus:py-2 focus:text-porcelain-50"
+        >
+          Skip to content
+        </a>
+        {/* Lightning: each time the bar moves, an arc of light races around its outline */}
+        <span key={`glow-${boltTrigger}`} aria-hidden="true" className="nav-glow" data-run="true" />
+        <span key={`bolt-${boltTrigger}`} aria-hidden="true" className="nav-bolt" data-run="true">
+          <span className="nav-bolt-ring" />
+        </span>
         <nav aria-label="Main" className="flex items-center justify-between gap-2 sm:gap-4">
           <a href="#top" className="shrink-0 rounded-md" aria-label="Clearspace, back to top">
             <Wordmark />
@@ -139,5 +145,13 @@ export function SiteNav() {
  * Brass while you browse, sea glass once a booking is under way.
  */
 function NavLight({ trigger, active }: { trigger: string; active: boolean }) {
-  return <span key={trigger} aria-hidden="true" className="cs-light" data-blink="true" data-state={active ? "active" : "idle"} />;
+  return (
+    <span
+      key={trigger}
+      aria-hidden="true"
+      className="cs-light"
+      data-blink="true"
+      data-state={active ? "active" : "idle"}
+    />
+  );
 }
