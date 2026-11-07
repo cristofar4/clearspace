@@ -65,9 +65,9 @@ export function SiteNav() {
   }, []);
 
   const bookingStarted = Boolean(draft.service);
-  // Each change of shape, section or booking choice gives the light a fresh burst
-  const lightTrigger = `${compact}-${current}-${draft.service}-${draft.frequency}-${draft.focusRoom}`;
-  const boltTrigger = `${compact}-${current}`;
+  // Each change of shape or booking choice gives the light a fresh burst
+  const lightTrigger = `${compact}-${draft.service}-${draft.frequency}-${draft.focusRoom}`;
+  const boltTrigger = `${compact}`;
 
   return (
     <>

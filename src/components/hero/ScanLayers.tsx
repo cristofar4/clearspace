@@ -139,7 +139,7 @@ export function DustCanvas({ progress }: { progress: MotionValue<number> }) {
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    const motes: Mote[] = Array.from({ length: 90 }, () => ({
+    const motes: Mote[] = Array.from({ length: 60 }, () => ({
       x: rand(),
       y: rand(),
       r: 0.6 + rand() * 2.2,

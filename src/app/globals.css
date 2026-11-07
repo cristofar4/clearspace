@@ -614,12 +614,12 @@ html.scroll-locked {
   pointer-events: none;
   opacity: 0;
   box-shadow:
-    0 0 0 1.5px rgb(224 168 75 / 0.9),
-    0 0 36px 6px rgb(224 168 75 / 0.4),
-    inset 0 0 22px rgb(240 190 95 / 0.22);
+    0 0 0 1px rgb(224 168 75 / 0.6),
+    0 0 24px 3px rgb(224 168 75 / 0.22),
+    inset 0 0 14px rgb(240 190 95 / 0.12);
 }
 .nav-glow[data-run="true"] {
-  animation: nav-glow 1.4s ease-out both;
+  animation: nav-glow 1.05s ease-out both;
 }
 @keyframes nav-glow {
   0%, 100% { opacity: 0; }
@@ -643,6 +643,6 @@ html.scroll-locked {
   pointer-events: none;
   opacity: 0;
   border-radius: inherit;
-  background: radial-gradient(460px circle at var(--px, 50%) var(--py, 50%), rgb(201 230 218 / 0.11), transparent 62%);
+  background: radial-gradient(460px circle at var(--px, 50%) var(--py, 50%), rgb(201 230 218 / 0.08), transparent 62%);
   transition: opacity 0.6s var(--ease-out-quint);
 }

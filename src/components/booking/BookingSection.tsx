@@ -33,7 +33,7 @@ function Summary() {
       className="on-dark overflow-hidden rounded-[var(--radius-panel)] bg-petrol-800 text-porcelain-50 lg:sticky lg:top-24"
     >
       <div className="relative aspect-[16/9] lg:aspect-[16/8]">
-        <Parallax amount={5}>
+        <Parallax amount={3}>
           <Image
             src={media.bookingCalmRoom.src}
             alt=""

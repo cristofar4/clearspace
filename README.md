@@ -100,8 +100,8 @@ also accepts true before and after pairs (`kind: "photo"`).
 Real time, procedural lightning drawn on a canvas (`src/components/ui/Lightning.tsx`). Nothing is a pre-made
 animation: every frame the bolts are regenerated with fresh jagged offsets, so they genuinely crackle.
 
-- **Navigation:** whenever the bar moves (contracting or expanding with scroll, or passing into a new section) a
-  bolt strikes it from above with a flash, the whole outline charges for a moment, then two bolts race around the
+- **Navigation:** whenever the bar changes shape (contracting or expanding with scroll) a
+  bolt strikes it from above with a soft flash, the whole outline charges for a moment, then two bolts race around the
   bar's exact outline in opposite directions, throwing forks outward and shedding sparks, and meet in a burst on
   the far side. The outline is measured every frame, so the bolts stay on the edge even while the bar is changing
   width and corner radius.
@@ -109,7 +109,7 @@ animation: every frame the bolts are regenerated with fresh jagged offsets, so t
   version that runs around the pill on hover or keyboard focus. Mouse and trackpad devices only.
 - **Hero scan beam:** electricity crackles along the beam as it sweeps, with forks jumping off it.
 
-It is decorative only, runs for about a second and a half per strike, collapses to nothing when idle, and never
+It is decorative only, runs for about a second per strike, collapses to nothing when idle, and never
 runs with reduced motion.
 
 ### The Clearspace light

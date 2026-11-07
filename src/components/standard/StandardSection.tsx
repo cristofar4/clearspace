@@ -14,7 +14,7 @@ export function StandardSection() {
           <PointerGlow />
           <div className="grid lg:grid-cols-12">
             <RevealMedia className="relative aspect-[4/3] lg:col-span-7 lg:aspect-auto lg:min-h-[520px]" from="left">
-              <Parallax amount={5}>
+              <Parallax amount={3}>
                 <Image
                   src={media.standardPeople.src}
                   alt={media.standardPeople.alt}
@@ -70,7 +70,7 @@ export function StandardSection() {
           </ol>
           <div className="grid grid-cols-5 items-end gap-4 lg:col-span-5">
             <RevealMedia className="relative col-span-3 aspect-[3/4] overflow-hidden rounded-[var(--radius-card)]">
-              <Parallax amount={5}>
+              <Parallax amount={3}>
                 <Image
                   src={media.standardDetail.src}
                   alt={media.standardDetail.alt}
@@ -84,7 +84,7 @@ export function StandardSection() {
             </RevealMedia>
             <div className="col-span-2 flex flex-col gap-4">
               <RevealMedia className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius-card)]" delay={0.12}>
-                <Parallax amount={5}>
+                <Parallax amount={3}>
                   <Image
                     src={media.standardProducts.src}
                     alt={media.standardProducts.alt}

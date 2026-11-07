@@ -369,7 +369,7 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-[4] bg-[#fffaf0]"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 0.32, 0] }}
+              animate={{ opacity: [0, 0.2, 0] }}
               transition={{ duration: 1.1, ease: "easeOut" }}
             />
           )}

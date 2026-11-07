@@ -68,7 +68,7 @@ interface Palette {
 }
 
 const PALETTE: Palette = {
-  glow: "rgba(232, 176, 82, 0.55)",
+  glow: "rgba(232, 176, 82, 0.4)",
   mid: "#3fbf9b",
   core: "#ffffff",
   halo: "rgba(244, 196, 100, 0.95)",
@@ -87,9 +87,9 @@ function strokeBolt(ctx: CanvasRenderingContext2D, pts: Pt[], scale: number, alp
   ctx.lineJoin = "round";
   // wide warm glow
   ctx.shadowColor = p.halo;
-  ctx.shadowBlur = 18 * scale;
+  ctx.shadowBlur = 12 * scale;
   ctx.strokeStyle = p.glow;
-  ctx.lineWidth = 6 * scale;
+  ctx.lineWidth = 4.5 * scale;
   trace();
   ctx.stroke();
   // electric body
@@ -141,7 +141,7 @@ interface Spark {
 }
 
 /** Smaller, quicker lightning for buttons on hover. */
-export const BUTTON_BOLT: StrikeOptions = { scale: 0.55, duration: 0.7, trail: 0.3, strike: false };
+export const BUTTON_BOLT: StrikeOptions = { scale: 0.5, duration: 0.6, trail: 0.24, strike: false };
 
 export interface StrikeOptions {
   /** Seconds for the bolts to travel the outline. */
@@ -184,7 +184,7 @@ export function LightningOutline({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const o = { duration: 1.4, scale: 1, trail: 0.22, strike: true, ...opts.current };
+    const o = { duration: 1.05, scale: 1, trail: 0.16, strike: true, ...opts.current };
     const M = 34 * o.scale; // canvas margin so glow and forks can spill outside
     let raf = 0;
     let running = false;
@@ -231,11 +231,11 @@ export function LightningOutline({
           const hit = shape.at(s0);
           const from = { x: hit.x + (Math.random() - 0.5) * 30 * o.scale, y: 0 };
           strokeBolt(ctx, jagged(from, hit, 22 * o.scale, 4), o.scale, (1 - t / 0.18) * flicker);
-          const g = ctx.createRadialGradient(hit.x, hit.y, 0, hit.x, hit.y, 60 * o.scale);
-          g.addColorStop(0, `rgba(255, 246, 221, ${0.85 * (1 - t / 0.18)})`);
+          const g = ctx.createRadialGradient(hit.x, hit.y, 0, hit.x, hit.y, 40 * o.scale);
+          g.addColorStop(0, `rgba(255, 246, 221, ${0.6 * (1 - t / 0.18)})`);
           g.addColorStop(1, "rgba(255, 246, 221, 0)");
           ctx.fillStyle = g;
-          ctx.fillRect(hit.x - 60 * o.scale, hit.y - 60 * o.scale, 120 * o.scale, 120 * o.scale);
+          ctx.fillRect(hit.x - 40 * o.scale, hit.y - 40 * o.scale, 80 * o.scale, 80 * o.scale);
         }
         if (t < 0.26) {
           const pts: Pt[] = [];
@@ -245,7 +245,7 @@ export function LightningOutline({
             const off = (Math.random() - 0.5) * 3 * o.scale;
             pts.push({ x: p.x + p.nx * off, y: p.y + p.ny * off });
           }
-          strokeBolt(ctx, pts, o.scale * 0.55, 0.35 * (1 - t / 0.26) * flicker);
+          strokeBolt(ctx, pts, o.scale * 0.5, 0.2 * (1 - t / 0.26) * flicker);
         }
 
         // 2. two bolts race the outline in opposite directions
@@ -255,7 +255,7 @@ export function LightningOutline({
           const pts: Pt[] = [];
           const step = 7 * o.scale;
           let off = 0;
-          const amp = 6 * o.scale;
+          const amp = 4.5 * o.scale;
           for (let d = 0; d <= trailLen; d += step) {
             const s = head - dir * d;
             const p = shape.at(s);
@@ -266,7 +266,7 @@ export function LightningOutline({
           strokeBolt(ctx, pts, o.scale, fade * flicker);
 
           // forks branch outward from the trail
-          if (fade > 0.3 && Math.random() < 0.45) {
+          if (fade > 0.3 && Math.random() < 0.2) {
             const idx = 1 + Math.floor(Math.random() * Math.min(pts.length - 1, 8));
             const base = shape.at(head - dir * idx * step);
             const len = (14 + Math.random() * 22) * o.scale;
@@ -281,7 +281,7 @@ export function LightningOutline({
           // sparks shed from the head
           if (fade > 0.2) {
             const hp = shape.at(head);
-            for (let k = 0; k < 2; k++) {
+            for (let k = 0; k < (Math.random() < 0.5 ? 1 : 0); k++) {
               const a = Math.atan2(hp.ny, hp.nx) + (Math.random() - 0.5) * 2.2;
               const v = (60 + Math.random() * 120) * o.scale;
               sparks.push({
@@ -301,7 +301,7 @@ export function LightningOutline({
         if (!burst && travel >= 1) {
           burst = true;
           const meet = shape.at(s0 + L / 2);
-          for (let k = 0; k < 26; k++) {
+          for (let k = 0; k < 12; k++) {
             const a = Math.random() * TAU;
             const v = (80 + Math.random() * 220) * o.scale;
             sparks.push({
@@ -314,7 +314,7 @@ export function LightningOutline({
               size: (0.9 + Math.random() * 1.6) * o.scale,
             });
           }
-          for (let k = 0; k < 4; k++) {
+          for (let k = 0; k < 2; k++) {
             const a = Math.random() * TAU;
             const len = (18 + Math.random() * 26) * o.scale;
             forks.push({
@@ -451,14 +451,14 @@ export function ElectricLine({ active }: { active: boolean }) {
         const pts: Pt[] = [];
         let off = 0;
         for (let x = 0; x <= W; x += 9) {
-          off = Math.max(-7, Math.min(7, off + (Math.random() - 0.5) * 8));
+          off = Math.max(-5, Math.min(5, off + (Math.random() - 0.5) * 6));
           pts.push({ x, y: mid + off });
         }
-        strokeBolt(ctx, pts, 0.6, k === 0 ? 0.85 : 0.45);
+        strokeBolt(ctx, pts, 0.5, k === 0 ? 0.55 : 0.25);
       }
       // occasional forks up and down
-      for (let i = 0; i < 3; i++) {
-        if (Math.random() < 0.5) continue;
+      for (let i = 0; i < 2; i++) {
+        if (Math.random() < 0.75) continue;
         const x = Math.random() * W;
         const up = Math.random() < 0.5 ? -1 : 1;
         strokeBolt(
