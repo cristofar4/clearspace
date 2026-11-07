@@ -20,6 +20,10 @@ import standardDetail from "@/assets/media/standard-detail.jpg";
 import standardProducts from "@/assets/media/standard-products.jpg";
 import bookingCalmRoom from "@/assets/media/booking-calm-room.jpg";
 import showcaseDetail from "@/assets/media/showcase-detail.jpg";
+import routeKitchen from "@/assets/media/route-kitchen.jpg";
+import compareKitchen from "@/assets/media/compare-kitchen.jpg";
+import compareBath from "@/assets/media/compare-bath.jpg";
+import compareLiving from "@/assets/media/compare-living.jpg";
 
 export interface Photo {
   src: StaticImageData;
@@ -30,6 +34,30 @@ export interface Photo {
 }
 
 export const media = {
+  routeKitchen: {
+    src: routeKitchen,
+    alt: "A real kitchen with a dark green island, marble worktops, pendant lights, a steel extractor hood and a garden door",
+    focus: "50% 50%",
+    credit: { name: "Clay Banks", url: "https://unsplash.com/photos/YFzqRFFyauw" },
+  },
+  compareKitchen: {
+    src: compareKitchen,
+    alt: "A bright farmhouse kitchen with white cabinets, a steel range, a sink under the window and fresh bread on the worktop",
+    focus: "50% 50%",
+    credit: { name: "Clay Banks", url: "https://unsplash.com/photos/nTqR3B3dp-Q" },
+  },
+  compareBath: {
+    src: compareBath,
+    alt: "A white bathroom with a marble shower, a timber vanity with brass taps, a round brass mirror and a large plant",
+    focus: "50% 50%",
+    credit: { name: "Clay Banks", url: "https://unsplash.com/photos/Fuguvv3goCA" },
+  },
+  compareLiving: {
+    src: compareLiving,
+    alt: "A calm living room with a pale corner sofa, a round coffee table, paper pendant lights and tall windows",
+    focus: "50% 50%",
+    credit: { name: "Pipcke", url: "https://unsplash.com/photos/g_5UyVBIX_k" },
+  },
   serviceHome: {
     src: serviceHome,
     alt: "A cleaner mopping the pale floor of a bright, airy living room",

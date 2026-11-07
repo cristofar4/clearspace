@@ -312,14 +312,6 @@ body {
   }
 }
 
-/* Illustration: architectural line weight stays constant at any zoom */
-.cs-art [stroke] {
-  vector-effect: non-scaling-stroke;
-}
-.cs-art .room-shade {
-  transition: opacity 0.7s var(--ease-out-quint);
-}
-
 /* Navigation: one coordinated transition for every property that changes */
 .site-nav {
   --nav-wide: min(94vw, 1640px);
@@ -425,4 +417,121 @@ html.scroll-locked {
 /* Programmatic focus targets (section headings, step titles) need no ring */
 [tabindex="-1"]:focus {
   outline: none;
+}
+
+/* ------------------------------------------------------------------
+   The Clearspace route (hero)
+------------------------------------------------------------------- */
+@property --sx { syntax: "<number>"; inherits: false; initial-value: 50; }
+@property --sy { syntax: "<number>"; inherits: false; initial-value: 50; }
+@property --rx { syntax: "<number>"; inherits: false; initial-value: 80; }
+@property --ry { syntax: "<number>"; inherits: false; initial-value: 80; }
+
+.route-spot {
+  background: radial-gradient(
+    ellipse calc(var(--rx) * 1%) calc(var(--ry) * 1%) at calc(var(--sx) * 1%) calc(var(--sy) * 1%),
+    transparent 0%,
+    transparent 62%,
+    rgb(10 38 43 / 0.52) 100%
+  );
+  transition:
+    --sx 1.2s var(--ease-out-quint),
+    --sy 1.2s var(--ease-out-quint),
+    --rx 1.2s var(--ease-out-quint),
+    --ry 1.2s var(--ease-out-quint),
+    opacity 0.8s var(--ease-out-quint);
+}
+
+.route-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgb(251 249 245 / 0.95);
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+}
+
+.route-sheen {
+  background: linear-gradient(
+    100deg,
+    rgb(255 255 255 / 0) 0%,
+    rgb(255 255 255 / 0.12) 30%,
+    rgb(255 250 238 / 0.55) 50%,
+    rgb(255 255 255 / 0.12) 70%,
+    rgb(255 255 255 / 0) 100%
+  );
+  mix-blend-mode: soft-light;
+  transform: skewX(-14deg);
+}
+
+.route-progress {
+  animation-name: route-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+@keyframes route-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ------------------------------------------------------------------
+   The Clearspace light: a small indicator that blinks in short bursts
+   (on load, when the bar changes shape, when the section or booking
+   changes, and on hover) and otherwise glows steadily. Bursts stay under
+   five seconds, and reduced motion keeps it steady.
+------------------------------------------------------------------- */
+.cs-light {
+  --light: #ecd3a4;
+  --light-glow: rgb(236 211 164 / 0.75);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--light);
+  box-shadow: 0 0 10px 1px var(--light-glow);
+}
+.cs-light::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 1px solid var(--light);
+  opacity: 0;
+}
+.cs-light[data-state="active"] {
+  --light: #bfe0d2;
+  --light-glow: rgb(191 224 210 / 0.8);
+}
+.cs-light[data-blink="true"] {
+  animation: cs-blink 1.3s ease-in-out 3;
+}
+.cs-light[data-blink="true"]::after {
+  animation: cs-ping 1.3s ease-out 3;
+}
+.btn:hover .cs-light,
+.btn:focus-visible .cs-light {
+  animation: cs-blink 1.3s ease-in-out 2;
+}
+.btn:hover .cs-light::after,
+.btn:focus-visible .cs-light::after {
+  animation: cs-ping 1.3s ease-out 2;
+}
+@keyframes cs-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 12px 2px var(--light-glow); }
+  40% { opacity: 0.15; box-shadow: 0 0 0 0 transparent; }
+  60% { opacity: 1; box-shadow: 0 0 14px 3px var(--light-glow); }
+}
+@keyframes cs-ping {
+  0% { transform: scale(0.5); opacity: 0.9; }
+  70%, 100% { transform: scale(1.9); opacity: 0; }
+}
+
+/* A fine inspection grid on the deep clean side of the comparison */
+.inspection-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.16) 1px, transparent 1px);
+  background-size: 44px 44px;
+  box-shadow: inset 0 0 120px rgb(10 38 43 / 0.18);
 }

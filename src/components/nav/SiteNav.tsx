@@ -64,6 +64,8 @@ export function SiteNav() {
   }, []);
 
   const bookingStarted = Boolean(draft.service);
+  // Each change of shape, section or booking choice gives the light a fresh burst
+  const lightTrigger = `${compact}-${current}-${draft.service}-${draft.frequency}-${draft.focusRoom}`;
 
   return (
     <>
@@ -103,11 +105,13 @@ export function SiteNav() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <a href="#book" className="btn btn-primary hidden lg:inline-flex">
+            <a href="#book" className="btn btn-primary hidden gap-3 pl-5 lg:inline-flex">
+              <NavLight trigger={lightTrigger} active={bookingStarted} />
               {bookingStarted ? "Continue booking" : "Book a clean"}
               <Icon name="arrow" size={18} className="btn-arrow" />
             </a>
-            <a href="#book" className="btn btn-primary btn-sm lg:hidden">
+            <a href="#book" className="btn btn-primary btn-sm gap-2.5 pl-3.5 lg:hidden">
+              <NavLight trigger={lightTrigger} active={bookingStarted} />
               Book
             </a>
             <button
@@ -127,4 +131,13 @@ export function SiteNav() {
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} returnFocusTo={menuButton} />
     </>
   );
+}
+
+/**
+ * The Clearspace light. Remounting on a new trigger restarts a short burst
+ * of blinks (under five seconds); between bursts it glows steadily.
+ * Brass while you browse, sea glass once a booking is under way.
+ */
+function NavLight({ trigger, active }: { trigger: string; active: boolean }) {
+  return <span key={trigger} aria-hidden="true" className="cs-light" data-blink="true" data-state={active ? "active" : "idle"} />;
 }

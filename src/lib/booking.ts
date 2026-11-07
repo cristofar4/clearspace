@@ -1,8 +1,8 @@
 import { maxDaysAhead, propertySizes, propertyTypes, timeWindows } from "@/content/booking";
-import type { RoomId } from "@/content/rooms";
 import { isServiceId, serviceById, type Frequency, type ServiceId } from "@/content/services";
 import { frequencyLabel } from "@/content/visits";
 
+export type RoomId = "kitchen" | "living" | "bath";
 export type FocusRoom = RoomId | "whole";
 
 export interface BookingDraft {

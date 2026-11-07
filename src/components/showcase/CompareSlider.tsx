@@ -15,11 +15,15 @@ export function CompareSlider({
   after,
   label,
   initial = 50,
+  beforeLabel = "Before",
+  afterLabel = "After",
 }: {
   before: ReactNode;
   after: ReactNode;
   label: string;
   initial?: number;
+  beforeLabel?: string;
+  afterLabel?: string;
 }) {
   const [value, setValue] = useState(initial);
   const [dragging, setDragging] = useState(false);
@@ -80,10 +84,10 @@ export function CompareSlider({
       </div>
 
       <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-porcelain-50/92 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-petrol-800">
-        Before
+        {beforeLabel}
       </span>
       <span className="pointer-events-none absolute right-4 top-4 rounded-full bg-petrol-800/92 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-porcelain-50">
-        After
+        {afterLabel}
       </span>
 
       <div className="pointer-events-none absolute inset-y-0" style={{ left: `${value}%` }}>
@@ -97,7 +101,7 @@ export function CompareSlider({
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={rounded}
-          aria-valuetext={`${rounded}% before, ${100 - rounded}% after`}
+          aria-valuetext={`${rounded}% ${beforeLabel.toLowerCase()}, ${100 - rounded}% ${afterLabel.toLowerCase()}`}
           onKeyDown={onKeyDown}
           className={`pointer-events-auto absolute top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-porcelain-50 bg-brass-500 text-porcelain-50 shadow-[0_10px_24px_-10px_rgba(13,47,53,0.7)] transition-transform duration-200 focus-visible:outline-offset-4 ${
             dragging ? "scale-110" : "hover:scale-105"

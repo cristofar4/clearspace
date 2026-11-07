@@ -1,76 +1,107 @@
 /**
- * Before and after pairs.
+ * The comparison in "The difference" section.
  *
- * The site ships with illustrated pairs. Each one is the same drawing of the
- * same room with the everyday clutter layer removed, so the comparison is
- * honest. When you have matching photographs (same room, same camera
- * position, before and after a real visit), switch an entry to kind "photo":
+ * kind "coverage": one real photograph shown twice. The left side marks what a
+ *   regular clean covers, the right side adds what a deep clean reaches. This
+ *   compares scope, so it needs only one honest photo per room.
+ *
+ * kind "photo": a true before and after. Use it once you have matching
+ *   photographs of the same room, from the same camera position, before and
+ *   after a real visit:
  *
  *   import before from "@/assets/media/kitchen-before.jpg";
  *   import after from "@/assets/media/kitchen-after.jpg";
  *   { id: "kitchen", label: "Kitchen", kind: "photo", before, after,
- *     beforeAlt: "...", afterAlt: "...", caption: "Kitchen, regular clean" }
+ *     beforeAlt: "...", afterAlt: "...", caption: "Kitchen, deep clean", notes: [...] }
  *
  * Never pair photographs of two different rooms.
  */
 import type { StaticImageData } from "next/image";
-import type { RoomId } from "./rooms";
 
-interface PairBase {
+import { media, type Photo } from "./media";
+
+export interface Pin {
+  x: number;
+  y: number;
+  label: string;
+}
+
+interface Base {
   id: string;
   label: string;
-  changes: string[];
   caption: string;
 }
 
-export type ShowcasePair =
-  | (PairBase & { kind: "illustration"; room: RoomId })
-  | (PairBase & {
+export type ShowcaseEntry =
+  | (Base & { kind: "coverage"; photo: Photo; regular: Pin[]; deep: Pin[] })
+  | (Base & {
       kind: "photo";
       before: StaticImageData;
       after: StaticImageData;
       beforeAlt: string;
       afterAlt: string;
+      notes: string[];
     });
 
-export const showcasePairs: ShowcasePair[] = [
+export const showcaseEntries: ShowcaseEntry[] = [
   {
     id: "kitchen",
     label: "Kitchen",
-    kind: "illustration",
-    room: "kitchen",
-    caption: "Illustrated example",
-    changes: [
-      "Dishes washed, dried and put away",
-      "Splashback and hob degreased",
-      "Worktops cleared and polished",
-      "Floor swept and mopped",
+    kind: "coverage",
+    photo: media.compareKitchen,
+    caption: "Real kitchen photographed by Clay Banks",
+    regular: [
+      { x: 56, y: 62, label: "Worktops" },
+      { x: 41, y: 64, label: "Hob and oven front" },
+      { x: 77, y: 57, label: "Sink and tap" },
+      { x: 52, y: 95, label: "Floor" },
     ],
-  },
-  {
-    id: "living",
-    label: "Living",
-    kind: "illustration",
-    room: "living",
-    caption: "Illustrated example",
-    changes: [
-      "Cushions plumped and throw folded",
-      "Laundry and parcels gathered",
-      "Glass cleaned until streak free",
-      "Rug and floor vacuumed",
+    deep: [
+      { x: 41, y: 78, label: "Inside the oven" },
+      { x: 41, y: 37, label: "Extractor and filter" },
+      { x: 55, y: 22, label: "Inside cupboards" },
+      { x: 13, y: 46, label: "Fridge, inside and out" },
+      { x: 60, y: 76, label: "Drawers and runners" },
     ],
   },
   {
     id: "bath",
     label: "Bath",
-    kind: "illustration",
-    room: "bath",
-    caption: "Illustrated example",
-    changes: [
-      "Towels laundered and folded",
-      "Mirror polished",
-      "Bottles lined up, surfaces wiped",
-      "Floor dried and cleaned",
+    kind: "coverage",
+    photo: media.compareBath,
+    caption: "Real bathroom photographed by Clay Banks",
+    regular: [
+      { x: 79, y: 71, label: "Basin and taps" },
+      { x: 85, y: 42, label: "Mirror" },
+      { x: 26, y: 78, label: "Toilet" },
+      { x: 45, y: 93, label: "Floor" },
+    ],
+    deep: [
+      { x: 45, y: 57, label: "Grout and shower glass" },
+      { x: 51, y: 31, label: "Window frame" },
+      { x: 64, y: 86, label: "Inside the vanity" },
+      { x: 54, y: 12, label: "Extractor vent" },
+      { x: 12, y: 88, label: "Skirting" },
+    ],
+  },
+  {
+    id: "living",
+    label: "Living",
+    kind: "coverage",
+    photo: media.compareLiving,
+    caption: "Real living room photographed by Pipcke",
+    regular: [
+      { x: 50, y: 66, label: "Cushions plumped" },
+      { x: 38, y: 82, label: "Surfaces dusted" },
+      { x: 60, y: 92, label: "Rug and floor" },
+      { x: 72, y: 50, label: "Lamps" },
+    ],
+    deep: [
+      { x: 48, y: 22, label: "Pendant shades" },
+      { x: 20, y: 36, label: "Windows and frames" },
+      { x: 50, y: 44, label: "Picture frames" },
+      { x: 44, y: 75, label: "Under the sofa" },
+      { x: 92, y: 58, label: "Door frames" },
     ],
   },
 ];

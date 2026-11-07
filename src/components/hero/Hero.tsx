@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 
 import { Icon } from "@/components/ui/Icon";
-import { HouseExplorer } from "./HouseExplorer";
+import { KitchenRoute } from "./KitchenRoute";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -49,8 +49,8 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.45, ease: EASE }}
           >
             <p className="mt-7 max-w-[30rem] text-[1.075rem] leading-relaxed text-ink-muted">
-              Thoughtful, thorough cleaning that brings calm back to the places you live and work. Choose a room in the
-              house to see a Clearspace reset.
+              Thoughtful, thorough cleaning that brings calm back to the places you live and work. Follow a real kitchen
+              clean, stop by stop, in the order we work.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -84,7 +84,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.2, ease: EASE }}
         >
-          <HouseExplorer />
+          <KitchenRoute />
         </motion.div>
       </div>
     </section>

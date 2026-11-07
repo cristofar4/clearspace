@@ -73,6 +73,12 @@ const paths = {
   ),
   edit: <path d="M14.5 5.5l4 4M4.5 19.5l1-4.5L15.8 4.7a1.4 1.4 0 0 1 2 0l1.5 1.5a1.4 1.4 0 0 1 0 2L9 18.5l-4.5 1Z" />,
   drag: <path d="m9 7-5 5 5 5M15 7l5 5-5 5" />,
+  play: <path d="M8 5.5v13l10.5-6.5L8 5.5Z" fill="currentColor" />,
+  pause: (
+    <>
+      <path d="M8.5 5.5v13M15.5 5.5v13" strokeWidth="2.6" />
+    </>
+  ),
 } as const;
 
 export type IconName = keyof typeof paths;

@@ -1,8 +1,9 @@
 # CLEARSPACE
 
 A premium cleaning company website built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4 and Motion.
-One page, six sections, a signature interaction called **The Clearspace Reset**, and a four step booking flow
-that is honest about being a demo until a backend is connected.
+One page, six sections, a signature interaction called **The Clearspace route** (a guided clean through a real
+kitchen photograph), a blinking indicator light in the navigation, and a four step booking flow that is honest
+about being a demo until a backend is connected.
 
 ```bash
 npm install
@@ -25,13 +26,13 @@ npm run lint
 | Motion potential | Moderate. | Moderate. | High: hotspots, focus changes, panel updates. |
 | Mobile and build cost | Bento collapses well. | Notches need care. | A photoreal cutaway render does not exist as a licensed asset and would need commissioning. |
 
-**Kept:** Design 3's hero concept, headline and light serif voice; Design 3's vertical service index on a petrol
+**Kept:** Design 3's idea of an explorable hero with hotspots and a connected panel, its headline and light serif voice; Design 3's vertical service index on a petrol
 panel; Design 1's palette discipline, service coverage (four services), booking fields and frequency options;
 Design 2's notched corner, used once as a signature (the service number docking into the photo).
 
-**Improved:** the house became an original architectural section drawing in code, so every room has a true busy
-and clean state; the three step process became the real booking steps with an animated indicator; the service
-list became accessible tabs whose photo wipes in the same direction as the Reset.
+**Improved:** the cutaway house became a real kitchen photograph you can walk through stop by stop; the before and
+after became an honest regular versus deep comparison on real photos; the three step process became the real
+booking steps with an animated indicator; the service list became accessible tabs whose photo wipes across.
 
 **Discarded:** Design 1's angled logo tab and repeated diagonals, Design 2's duplicate arrow button and font mixing,
 the "Your space" apartment and workspace tabs under Design 3's hero (they duplicated the services), and the compact
@@ -50,26 +51,47 @@ navbar previews (annotations, not page sections).
 - **Copy:** short, natural, and free of hyphens in visible text. No reviews, certifications, statistics, prices or
   contact details were invented. Prices show "Tailored quote" until set.
 
-## 3. The Clearspace Reset
+## 3. The Clearspace route
 
-The hero is a cross section of a two storey home drawn in SVG (`src/components/illustration`). Each room is
-three layers: **Base** (architecture and furniture), **Clean** (the details of a cared for room) and **Clutter**
-(laundry, dishes, smudges and a dull film).
+The hero is a real kitchen photograph (`src/content/route.ts`). A Clearspace kitchen clean is shown in the order
+professionals work: top to bottom, dry before wet, finishing at the door.
 
-Selecting Kitchen, Living or Bath, from the hotspot in the drawing or the tabs below it:
+1. **Lights and high shelves** 2. **Windows and glass** 3. **Hood, hob and splashback**
+4. **Worktops and island** 5. **Sink and taps** 6. **Floors**
 
-1. highlights the room and its tab;
-2. pans and crops the scene toward it (one CSS transform; hotspots move with it but never scale);
-3. lowers the light in every other room and warms the chosen one;
-4. runs a single squeegee pass that clips the Clutter layer away and reveals the Clean layer of the same room;
-5. updates the connected panel with what that room's clean includes;
-6. **Plan this clean** carries Home cleaning and the chosen room into the booking form, scrolls there and moves focus.
+At each stop:
 
-The first reset plays once on load, only if the visitor has not already interacted. With reduced motion there is no
-pan or wipe: rooms switch instantly and every action still works.
+- a small light travels the route from the garden door and draws it in brass behind it;
+- the camera moves in on the surface (one transform; the numbered markers move with it but never scale);
+- the room dims around the surface and an inspection frame settles on it;
+- a single polish pass crosses the surface;
+- the panel says what is done there and why it comes at that point in the order.
 
-The before and after showcase reuses the same drawing, cropped to one room, so the comparison is always the same
-room. It is labelled "Illustrated example".
+It plays once on load if the visitor has not acted, pauses when scrolled away or when the tab is hidden, and has
+Play, Pause, Previous and Next controls plus numbered tabs with progress bars. Any marker or tab jumps straight
+to that stop. **Plan this clean** carries Home cleaning with a kitchen focus into the booking form. With reduced
+motion there is no autoplay, camera move or polish pass; every stop still works.
+
+**Why there is no "messy to clean" photo in the hero.** No licensed photographs exist of the same real kitchen
+before and after a clean (Unsplash, Wikimedia Commons; Pexels and Pixabay are unreachable from this build
+environment). Pairing someone else's messy kitchen with a different clean one would misrepresent the work, so the
+real photo shows the method instead. When the client has their own matched pairs, they drop into the comparison
+section (below) without code changes.
+
+### The difference: regular or deep
+
+Real photographs of a kitchen, a bathroom and a living room. The accessible slider (mouse, touch, arrow keys,
+Page Up, Page Down, Home, End) compares what a regular clean covers on the left with what a deep clean adds on the
+right, marked on the same photo. It compares scope, so one honest photo per room is enough. `src/content/showcase.ts`
+also accepts true before and after pairs (`kind: "photo"`).
+
+### The Clearspace light
+
+The Book button in the navigation carries a small indicator light. It blinks in short bursts (on load, when the bar
+contracts or expands, when you move into a new section, when you make a booking choice, and on hover) and glows
+steadily in between. It is brass while you browse and turns sea glass once a booking is under way. Bursts stay
+under five seconds so the page meets WCAG 2.2.2, and reduced motion keeps it steady. The same light leads the
+route in the hero.
 
 ## 4. Navigation
 
@@ -84,14 +106,15 @@ keys, Escape returns focus). Below 1024px a dedicated full screen menu opens in 
 | What | Where | How |
 |---|---|---|
 | Photographs | `src/assets/media/*.jpg`, registered in `src/content/media.ts` | Replace the file (or change the import), update `alt` and `focus` (CSS object position). Sizes and blur placeholders are read automatically. |
-| Before and after pairs | `src/content/showcase.ts` | Switch an entry to `kind: "photo"` with matching `before` and `after` imports. Use the same room and camera position. Never pair two different rooms. |
-| Hero rooms | `src/content/rooms.ts` (copy and geometry) and `src/components/illustration/rooms.tsx` (drawing) | Copy can change freely. If you redraw a room keep its box size, or update `box`, `dot` and `focusView`. |
+| Hero kitchen and route | `src/content/route.ts` (stops) and `media.routeKitchen` | Use a landscape 3:2 photo. For each stop set `at` (marker) and `frame` (the surface) in percent of the photo, and `zoom` (1.3 to 1.7 works well). Copy can change freely. |
+| Comparison rooms | `src/content/showcase.ts` | `kind: "coverage"` takes one photo with `regular` and `deep` pins in percent of the photo. For a true before and after, use `kind: "photo"` with matching `before` and `after` imports from the same room and camera position. Never pair two different rooms. |
 | Services, visits, standards | `src/content/services.ts`, `visits.ts`, `standards.ts` | Plain data. `priceFrom: null` shows "Tailored quote". |
 | Business details | `src/content/site.ts` | Contact fields left `null` are not rendered. |
 | Booking options | `src/content/booking.ts` | Property types, sizes, time windows, how far ahead dates may be chosen. |
 
-Current photographs are from Unsplash under the Unsplash License, credited in the footer. Replace them with the
-client's own photography before launch, ideally of their team in uniform for the standards band.
+Current photographs are from Unsplash under the Unsplash License (each licence checked individually), credited
+in the footer. Replace them with the client's own photography before launch: ideally a real client kitchen for the
+route, matched before and after pairs for the comparison, and their team in uniform for the standards band.
 
 ## 6. Connecting a real booking backend
 
@@ -130,25 +153,32 @@ availability, fetch it into the date step and keep the server as the source of t
 ## 7. Motion system
 
 One library (Motion) plus CSS transitions. Shared easing `cubic-bezier(0.22, 1, 0.36, 1)`. Headings rise line by line
-from a mask; images open with a short clip wipe and settle from a slight zoom; service photos wipe left to right
-like the Reset; tab indicators glide between items; booking steps slide in the direction of travel while the progress
-line fills. Buttons press 1px with a small arrow nudge. No scroll hijacking, preloader, cursor replacement or
-constant motion. `prefers-reduced-motion` removes transforms, pans, wipes and smooth scrolling; all content stays.
+from a mask; images open with a short clip wipe and settle from a slight zoom; service photos wipe left to right;
+the route light travels and draws its path; tab indicators glide between items; booking steps slide in the direction
+of travel while the progress line fills. Buttons press 1px with a small arrow nudge. No scroll hijacking, preloader
+or cursor replacement. Anything that moves for more than five seconds (the route) can be paused, and the nav light
+only blinks in short bursts. `prefers-reduced-motion` removes transforms, camera moves, polish passes, blinking and
+smooth scrolling; all content stays.
 
 ## 8. What was verified
 
-Automated Playwright checks (71) and an axe-core audit (no violations at 1440px or 390px):
+Automated Playwright checks (84) and an axe-core audit (no violations at 1440px or 390px):
 
 - nav width at top (94vw) and after scroll (78vw), animated monotonically, hysteresis with no toggling near the
-  threshold, smooth reversal, zero layout shift;
+  threshold, smooth reversal, zero layout shift; nav light blinks in bursts under five seconds and turns sea glass
+  once a booking starts;
 - every in-page link has a target; dropdown keyboard support and focus return;
 - service tabs (click, arrows, dropdown deep links) update the right details;
-- hero hotspots and tabs select, zoom and reset rooms; Plan this clean carries service and room into booking;
-- slider with arrow keys, Home, End and mouse drag; room switching;
+- the route autoplays once, advances on its own, pauses when scrolled away, and responds to markers, tabs, arrow
+  keys, Previous, Next, Play and Pause; the camera moves in on each surface; Plan this clean carries the kitchen
+  into booking and moves focus there;
+- comparison slider with arrow keys, Home, End and mouse drag; room switching updates the list;
 - booking: required fields, past and same day dates rejected, invalid email rejected, service dependent options,
   review summary and live summary carry every selection, demo dialog wording, focus trapped and returned;
 - no horizontal overflow at 360, 390, 768 and 1024px; phone menu opens, traps focus, closes and returns focus;
-- reduced motion: no zoom, instant resets, nav transitions disabled, smooth scroll off;
+- reduced motion: no autoplay, no camera zoom, stops still selectable, no blinking, nav transitions and smooth
+  scroll off;
+- no hyphens or dashes in visible copy, labels or alt text;
 - production build prerenders the page statically; the API route accepts, rejects and forwards correctly.
 
 ## 9. Project structure
@@ -160,7 +190,6 @@ src/
   lib/                 booking rules and payload, hooks, scroll helpers
   components/
     nav/               SiteNav, ServicesMenu, MobileMenu
-    hero/              Hero, HouseExplorer (the Reset)
-    illustration/      house section drawing, palette, shared SVG defs
+    hero/              Hero, KitchenRoute (the Clearspace route)
     services/ showcase/ standard/ visits/ booking/ footer/ ui/
 ```

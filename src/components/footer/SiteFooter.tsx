@@ -124,8 +124,7 @@ export function SiteFooter() {
                   </a>
                   {i < photoCredits.length - 2 ? ", " : i === photoCredits.length - 2 ? " and " : "."}
                 </span>
-              ))}{" "}
-              House illustrations are original to this site.
+              ))}
             </p>
           </details>
         </div>
