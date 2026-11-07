@@ -8,6 +8,7 @@ import { Wordmark } from "@/components/ui/Wordmark";
 import { primaryNav } from "@/content/site";
 import { MobileMenu } from "./MobileMenu";
 import { ServicesMenu } from "./ServicesMenu";
+import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 /** Contract past this point, expand again only above the lower one. The gap stops flicker. */
 const CONTRACT_AT = 112;
@@ -79,9 +80,7 @@ export function SiteNav() {
         </a>
         {/* Lightning: each time the bar moves, an arc of light races around its outline */}
         <span key={`glow-${boltTrigger}`} aria-hidden="true" className="nav-glow" data-run="true" />
-        <span key={`bolt-${boltTrigger}`} aria-hidden="true" className="nav-bolt" data-run="true">
-          <span className="nav-bolt-ring" />
-        </span>
+        <LightningOutline trigger={boltTrigger} />
         <nav aria-label="Main" className="flex items-center justify-between gap-2 sm:gap-4">
           <a href="#top" className="shrink-0 rounded-md" aria-label="Clearspace, back to top">
             <Wordmark />
@@ -112,6 +111,7 @@ export function SiteNav() {
 
           <div className="flex items-center gap-2">
             <a href="#book" className="btn btn-primary hidden gap-3 pl-5 lg:inline-flex">
+              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               <NavLight trigger={lightTrigger} active={bookingStarted} />
               {bookingStarted ? "Continue booking" : "Book a clean"}
               <Icon name="arrow" size={18} className="btn-arrow" />

@@ -27,6 +27,7 @@ import { useSite } from "@/components/providers/SiteProvider";
 import { Icon } from "@/components/ui/Icon";
 import { routePhoto, routeStart, routeStops } from "@/content/route";
 import { DustCanvas, Glints, GrimeLayer, ScanBeam, ScanReadout } from "./ScanLayers";
+import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 /** The photo is 3:2, so the overlay uses a 150 by 100 coordinate space. */
@@ -707,6 +708,7 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
                     planClean({ service: "home", focusRoom: "kitchen", note: "Kitchen added as your focus room." })
                   }
                 >
+                  <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
                   Plan this clean
                   <Icon name="arrow" size={18} className="btn-arrow" />
                 </button>

@@ -24,6 +24,7 @@ import { prefersReducedMotion } from "@/lib/scroll";
 import { ChoiceCard, describedBy, FieldError, FieldShell } from "./fields";
 import { RequestDialog, type RequestOutcome } from "./RequestDialog";
 import { StepIndicator } from "./StepIndicator";
+import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const serviceIcon: Record<string, IconName> = { home: "home", office: "office", box: "box", ladder: "ladder" };
@@ -72,7 +73,10 @@ export function BookingForm() {
   useEffect(() => {
     if (!moved.current) return;
     moved.current = false;
-    const t = window.setTimeout(() => headingRef.current?.focus({ preventScroll: true }), prefersReducedMotion() ? 0 : 320);
+    const t = window.setTimeout(
+      () => headingRef.current?.focus({ preventScroll: true }),
+      prefersReducedMotion() ? 0 : 320,
+    );
     return () => window.clearTimeout(t);
   }, [step]);
 
@@ -175,7 +179,10 @@ export function BookingForm() {
               transition={{ duration: 0.35, ease: EASE }}
               className="overflow-hidden"
             >
-              <div className="mt-6 flex items-center gap-3 rounded-[14px] bg-seaglass-100 px-4 py-3 text-[0.9rem] text-petrol-900" role="status">
+              <div
+                className="mt-6 flex items-center gap-3 rounded-[14px] bg-seaglass-100 px-4 py-3 text-[0.9rem] text-petrol-900"
+                role="status"
+              >
                 <Icon name="check" size={18} strokeWidth={2} className="shrink-0 text-seaglass-600" />
                 <span className="flex-1">{prefillNote}</span>
                 <button
@@ -209,13 +216,19 @@ export function BookingForm() {
             >
               <legend className="sr-only">{stepMeta.label}</legend>
               <h3 ref={headingRef} tabIndex={-1} className="display-md text-petrol-900 outline-none">
-                <span className="mr-3 font-sans text-sm font-semibold tabular-nums text-brass-700">{stepMeta.number}</span>
+                <span className="mr-3 font-sans text-sm font-semibold tabular-nums text-brass-700">
+                  {stepMeta.number}
+                </span>
                 {stepMeta.label}
               </h3>
 
               {step === 0 && (
                 <div className="mt-6 grid gap-6">
-                  <div role="radiogroup" aria-labelledby="bk-service-label" aria-describedby={errors.service ? "bk-service-error" : undefined}>
+                  <div
+                    role="radiogroup"
+                    aria-labelledby="bk-service-label"
+                    aria-describedby={errors.service ? "bk-service-error" : undefined}
+                  >
                     <p id="bk-service-label" className="mb-2 text-[0.9rem] font-medium text-petrol-900">
                       Service
                     </p>
@@ -353,9 +366,7 @@ export function BookingForm() {
                       ))}
                     </div>
                     {frequencies.length === 1 && (
-                      <p className="mt-2 text-[0.84rem] text-ink-muted">
-                        {rows.service} is booked as a single visit.
-                      </p>
+                      <p className="mt-2 text-[0.84rem] text-ink-muted">{rows.service} is booked as a single visit.</p>
                     )}
                     <FieldError id="bk-frequency-error" message={errors.frequency} />
                   </div>
@@ -466,7 +477,11 @@ export function BookingForm() {
                       maxLength={600}
                       onChange={(e) => set("notes", e.target.value)}
                       aria-invalid={Boolean(errors.notes)}
-                      aria-describedby={describedBy("bk-notes", errors.notes, "Access, parking, pets or rooms to skip.")}
+                      aria-describedby={describedBy(
+                        "bk-notes",
+                        errors.notes,
+                        "Access, parking, pets or rooms to skip.",
+                      )}
                     />
                   </FieldShell>
                 </div>
@@ -486,7 +501,10 @@ export function BookingForm() {
                       { label: "Notes", value: rows.notes || "None", step: 2 },
                       { label: "Price", value: rows.price, step: -1 },
                     ].map((row) => (
-                      <div key={row.label} className="grid grid-cols-[minmax(0,7.5rem)_1fr_auto] items-start gap-3 py-3.5 sm:grid-cols-[10rem_1fr_auto]">
+                      <div
+                        key={row.label}
+                        className="grid grid-cols-[minmax(0,7.5rem)_1fr_auto] items-start gap-3 py-3.5 sm:grid-cols-[10rem_1fr_auto]"
+                      >
                         <dt className="text-[0.85rem] text-ink-muted">{row.label}</dt>
                         <dd className="min-w-0 break-words text-[0.95rem] text-petrol-900">{row.value}</dd>
                         {row.step >= 0 ? (
@@ -532,11 +550,13 @@ export function BookingForm() {
           {step < 3 ? (
             // Distinct keys: reusing one element and flipping it to type="submit" mid click would submit the form
             <button key="next" type="button" className="btn btn-primary" onClick={next}>
+              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               Continue to {bookingSteps[step + 1].label.toLowerCase()}
               <Icon name="arrow" size={18} className="btn-arrow" />
             </button>
           ) : (
             <button key="submit" ref={submitRef} type="submit" className="btn btn-primary" disabled={submitting}>
+              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               {bookingMode === "demo" ? "Send demo request" : submitting ? "Sending" : "Send booking request"}
               <Icon name="arrow" size={18} className="btn-arrow" />
             </button>

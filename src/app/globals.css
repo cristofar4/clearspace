@@ -603,57 +603,10 @@ html.scroll-locked {
 }
 
 /* ------------------------------------------------------------------
-   Nav lightning: when the bar moves, an electric arc races around its
-   outline (two sparks from opposite corners), with a brief flicker.
-   The ring is masked to a 1.5px border so it follows any radius.
+   Nav lightning: the bolts themselves are drawn live on a canvas
+   (components/ui/Lightning.tsx); this is the flash of the outline
+   at the moment of the strike.
 ------------------------------------------------------------------- */
-@property --arc { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
-
-.nav-bolt {
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  /* glow lives on this outer layer so the mask below does not clip it */
-  filter: drop-shadow(0 0 3px rgb(244 196 100 / 1)) drop-shadow(0 0 12px rgb(224 168 75 / 0.85))
-    drop-shadow(0 0 26px rgb(95 181 154 / 0.55));
-}
-.nav-bolt-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 2.5px;
-  background: conic-gradient(
-    from var(--arc),
-    transparent 0deg,
-    transparent 80deg,
-    rgb(224 168 75 / 0) 90deg,
-    rgb(224 168 75 / 0.75) 140deg,
-    #f2c46c 166deg,
-    #fffbea 177deg,
-    transparent 180deg,
-    transparent 272deg,
-    rgb(95 181 154 / 0) 270deg,
-    rgb(95 181 154 / 0.75) 320deg,
-    #7fd6b8 346deg,
-    #f4fffb 357deg,
-    transparent 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box exclude,
-    linear-gradient(#000 0 0);
-}
-.nav-bolt[data-run="true"] .nav-bolt-ring {
-  animation: nav-arc 1.15s cubic-bezier(0.55, 0, 0.25, 1) both;
-}
-.nav-bolt[data-run="true"] {
-  animation: nav-flicker 1.15s linear both;
-}
 .nav-glow {
   position: absolute;
   inset: 0;
@@ -666,20 +619,7 @@ html.scroll-locked {
     inset 0 0 22px rgb(240 190 95 / 0.22);
 }
 .nav-glow[data-run="true"] {
-  animation: nav-glow 1.15s ease-out both;
-}
-@keyframes nav-arc {
-  from { --arc: 0deg; }
-  to { --arc: 360deg; }
-}
-@keyframes nav-flicker {
-  0% { opacity: 0; }
-  5% { opacity: 1; }
-  9% { opacity: 0.25; }
-  13% { opacity: 1; }
-  17% { opacity: 0.5; }
-  21%, 82% { opacity: 1; }
-  100% { opacity: 0; }
+  animation: nav-glow 1.4s ease-out both;
 }
 @keyframes nav-glow {
   0%, 100% { opacity: 0; }
