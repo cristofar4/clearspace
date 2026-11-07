@@ -611,25 +611,26 @@ html.scroll-locked {
 
 .nav-sweep {
   position: absolute;
-  inset: -1.5px;
+  inset: -2px;
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  filter: drop-shadow(0 0 3px rgb(240 200 120 / 0.85)) drop-shadow(0 0 10px rgb(224 168 75 / 0.4));
+  filter: drop-shadow(0 0 3px rgb(232 178 82 / 0.95)) drop-shadow(0 0 12px rgb(224 168 75 / 0.6));
 }
 .nav-sweep::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 2px;
   background: conic-gradient(
     from var(--sweep),
     transparent 0deg,
-    transparent 210deg,
-    rgb(236 200 130 / 0) 230deg,
-    rgb(236 200 130 / 0.65) 310deg,
-    #fff3d6 352deg,
+    transparent 180deg,
+    rgb(214 160 70 / 0) 200deg,
+    rgb(214 160 70 / 0.75) 290deg,
+    #e9b85e 335deg,
+    #fff1cc 354deg,
     #ffffff 358deg,
     transparent 360deg
   );
@@ -642,10 +643,10 @@ html.scroll-locked {
     linear-gradient(#000 0 0);
 }
 .nav-sweep[data-run="true"] {
-  animation: nav-sweep-fade 1.3s ease-in-out both;
+  animation: nav-sweep-fade 1.6s ease-in-out both;
 }
 .nav-sweep[data-run="true"]::before {
-  animation: nav-sweep-turn 1.3s cubic-bezier(0.45, 0, 0.25, 1) both;
+  animation: nav-sweep-turn 1.6s cubic-bezier(0.45, 0, 0.25, 1) both;
 }
 @keyframes nav-sweep-turn {
   from { --sweep: 0deg; }
