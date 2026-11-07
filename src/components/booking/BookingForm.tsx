@@ -24,7 +24,6 @@ import { prefersReducedMotion } from "@/lib/scroll";
 import { ChoiceCard, describedBy, FieldError, FieldShell } from "./fields";
 import { RequestDialog, type RequestOutcome } from "./RequestDialog";
 import { StepIndicator } from "./StepIndicator";
-import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const serviceIcon: Record<string, IconName> = { home: "home", office: "office", box: "box", ladder: "ladder" };
@@ -550,13 +549,11 @@ export function BookingForm() {
           {step < 3 ? (
             // Distinct keys: reusing one element and flipping it to type="submit" mid click would submit the form
             <button key="next" type="button" className="btn btn-primary" onClick={next}>
-              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               Continue to {bookingSteps[step + 1].label.toLowerCase()}
               <Icon name="arrow" size={18} className="btn-arrow" />
             </button>
           ) : (
             <button key="submit" ref={submitRef} type="submit" className="btn btn-primary" disabled={submitting}>
-              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               {bookingMode === "demo" ? "Send demo request" : submitting ? "Sending" : "Send booking request"}
               <Icon name="arrow" size={18} className="btn-arrow" />
             </button>

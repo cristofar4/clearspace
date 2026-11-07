@@ -2,9 +2,9 @@
 
 A premium cleaning company website built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4 and Motion.
 One page, six sections and a signature hero: a real kitchen that arrives dirty, is **scanned clean** top to
-bottom, then walked through stop by stop as **the Clearspace route**. The navigation throws lightning around its
-outline whenever it moves, a light runs through the whole site, and a four step booking flow stays honest about
-being a demo until a backend is connected.
+bottom, then walked through stop by stop as **the Clearspace route**. A soft light sweeps the navigation's outline
+as it moves on scroll, a light runs through the whole site, and a four step booking flow stays honest about being a
+demo until a backend is connected.
 
 ```bash
 npm install
@@ -95,22 +95,11 @@ Page Up, Page Down, Home, End) compares what a regular clean covers on the left 
 right, marked on the same photo. It compares scope, so one honest photo per room is enough. `src/content/showcase.ts`
 also accepts true before and after pairs (`kind: "photo"`).
 
-### Lightning
+### Light on the navigation
 
-Real time, procedural lightning drawn on a canvas (`src/components/ui/Lightning.tsx`). Nothing is a pre-made
-animation: every frame the bolts are regenerated with fresh jagged offsets, so they genuinely crackle.
-
-- **Navigation:** whenever the bar changes shape (contracting or expanding with scroll) a
-  bolt strikes it from above with a soft flash, the whole outline charges for a moment, then two bolts race around the
-  bar's exact outline in opposite directions, throwing forks outward and shedding sparks, and meet in a burst on
-  the far side. The outline is measured every frame, so the bolts stay on the edge even while the bar is changing
-  width and corner radius.
-- **Buttons:** the main booking buttons (navigation, hero, route panel, services, booking steps) carry a smaller
-  version that runs around the pill on hover or keyboard focus. Mouse and trackpad devices only.
-- **Hero scan beam:** electricity crackles along the beam as it sweeps, with forks jumping off it.
-
-It is decorative only, runs for about a second per strike, collapses to nothing when idle, and never
-runs with reduced motion.
+Each time the bar changes shape while you scroll (contracting past the top of the page, or expanding as you return),
+one soft warm light sweeps once around its outline and fades. It follows the bar's exact shape at any width and
+radius, never runs on page load or on section changes, and reduced motion turns it off.
 
 ### The Clearspace light
 
@@ -182,8 +171,7 @@ availability, fetch it into the date step and keep the server as the source of t
 One idea runs through every effect: light that scans, reveals and cleans.
 
 - **Hero:** grime, scan beam, dissolving dust, bloom and glints, then the route with its travelling light.
-- **Navigation:** procedural lightning strikes and races the outline on every move; the Book light blinks in short bursts.
-- **Buttons:** smaller lightning around the main booking buttons on hover or keyboard focus.
+- **Navigation:** a soft light sweeps the outline when the bar moves on scroll; the Book light blinks in short bursts.
 - **Images:** every photograph is scanned into view by a beam rather than faded in, and settles from a slight zoom.
 - **Headings:** a gleam of light passes through the italic word once it arrives; the hero's "We reset" gleams
   the moment the room comes clean.
@@ -204,12 +192,12 @@ smooth scrolling; all content stays.
 
 ## 8. What was verified
 
-Automated Playwright checks (93) and an axe-core audit (no violations at 1440px or 390px):
+Automated Playwright checks (94) and an axe-core audit (no violations at 1440px or 390px):
 
 - the hero starts dirty, the scan sweeps and finishes clean, stop markers appear afterwards, and the route then
   autoplays; reduced motion shows the room clean with no grime, readout or autoplay;
-- the navigation lightning paints when the bar moves and its canvas collapses to nothing when idle; with reduced
-  motion no lightning is drawn;
+- the navigation light does not run on load, sweeps the outline when the bar moves on scroll, and stays still with
+  reduced motion;
 
 - nav width at top (94vw) and after scroll (78vw), animated monotonically, hysteresis with no toggling near the
   threshold, smooth reversal, zero layout shift; nav light blinks in bursts under five seconds and turns sea glass

@@ -10,7 +10,6 @@ import { Reveal, RevealHeading } from "@/components/ui/Reveal";
 import { serviceById, services, type Service, type ServiceId } from "@/content/services";
 import { frequencyLabel } from "@/content/visits";
 import { Gleam, PointerGlow } from "@/components/ui/Motion";
-import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -286,7 +285,6 @@ export function ServicesSection() {
                       className="btn btn-light"
                       onClick={() => planClean({ service: service.id as ServiceId, note: `${service.name} selected.` })}
                     >
-                      <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
                       Plan this clean
                       <Icon name="arrow" size={18} className="btn-arrow" />
                     </button>

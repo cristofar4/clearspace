@@ -3,8 +3,6 @@
 import { motion, useMotionValueEvent, useTransform, type MotionValue } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-import { ElectricLine } from "@/components/ui/Lightning";
-
 /** Small seeded random, so the grime looks the same on every visit. */
 function seeded(seed: number) {
   let s = seed >>> 0;
@@ -205,7 +203,6 @@ export function ScanBeam({ progress, visible }: { progress: MotionValue<number>;
     >
       <div className="scan-band absolute inset-x-0 bottom-0 h-[16vh] max-h-40" />
       <div className="scan-line absolute inset-x-0 -top-px h-[2px]" />
-      <ElectricLine active={visible} />
     </motion.div>
   );
 }

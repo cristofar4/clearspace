@@ -6,7 +6,6 @@ import { useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { KitchenRoute } from "./KitchenRoute";
 import { Gleam } from "@/components/ui/Motion";
-import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -59,7 +58,6 @@ export function Hero() {
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#book" className="btn btn-primary">
-                <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
                 Book a clean
                 <Icon name="arrow" size={18} className="btn-arrow" />
               </a>

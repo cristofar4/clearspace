@@ -8,7 +8,6 @@ import { Wordmark } from "@/components/ui/Wordmark";
 import { primaryNav } from "@/content/site";
 import { MobileMenu } from "./MobileMenu";
 import { ServicesMenu } from "./ServicesMenu";
-import { BUTTON_BOLT, LightningOutline } from "@/components/ui/Lightning";
 
 /** Contract past this point, expand again only above the lower one. The gap stops flicker. */
 const CONTRACT_AT = 112;
@@ -18,6 +17,9 @@ const SECTIONS = ["services", "difference", "standard", "visits", "book"];
 
 export function SiteNav() {
   const [compact, setCompact] = useState(false);
+  /** Counts each time the bar changes shape while scrolling; drives the light sweep. */
+  const [moves, setMoves] = useState(0);
+  const compactRef = useRef(false);
   const [current, setCurrent] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -28,7 +30,13 @@ export function SiteNav() {
     const update = () => {
       frame = 0;
       const y = window.scrollY;
-      setCompact((was) => (was ? y > EXPAND_AT : y > CONTRACT_AT));
+      const was = compactRef.current;
+      const next = was ? y > EXPAND_AT : y > CONTRACT_AT;
+      if (next !== was) {
+        compactRef.current = next;
+        setCompact(next);
+        setMoves((m) => m + 1);
+      }
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -67,7 +75,6 @@ export function SiteNav() {
   const bookingStarted = Boolean(draft.service);
   // Each change of shape or booking choice gives the light a fresh burst
   const lightTrigger = `${compact}-${draft.service}-${draft.frequency}-${draft.focusRoom}`;
-  const boltTrigger = `${compact}`;
 
   return (
     <>
@@ -78,9 +85,8 @@ export function SiteNav() {
         >
           Skip to content
         </a>
-        {/* Lightning: each time the bar moves, an arc of light races around its outline */}
-        <span key={`glow-${boltTrigger}`} aria-hidden="true" className="nav-glow" data-run="true" />
-        <LightningOutline trigger={boltTrigger} />
+        {/* Each time the bar moves on scroll, a soft light sweeps once around its outline */}
+        <span key={`sweep-${moves}`} aria-hidden="true" className="nav-sweep" data-run={moves > 0} />
         <nav aria-label="Main" className="flex items-center justify-between gap-2 sm:gap-4">
           <a href="#top" className="shrink-0 rounded-md" aria-label="Clearspace, back to top">
             <Wordmark />
@@ -111,7 +117,6 @@ export function SiteNav() {
 
           <div className="flex items-center gap-2">
             <a href="#book" className="btn btn-primary hidden gap-3 pl-5 lg:inline-flex">
-              <LightningOutline hover onMount={false} options={BUTTON_BOLT} />
               <NavLight trigger={lightTrigger} active={bookingStarted} />
               {bookingStarted ? "Continue booking" : "Book a clean"}
               <Icon name="arrow" size={18} className="btn-arrow" />

@@ -603,28 +603,58 @@ html.scroll-locked {
 }
 
 /* ------------------------------------------------------------------
-   Nav lightning: the bolts themselves are drawn live on a canvas
-   (components/ui/Lightning.tsx); this is the flash of the outline
-   at the moment of the strike.
+   Nav light: each time the bar moves on scroll, one soft light sweeps
+   around its outline. The ring is masked to the border so it follows
+   any radius; the glow sits on the outer layer so it is not clipped.
 ------------------------------------------------------------------- */
-.nav-glow {
+@property --sweep { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+.nav-sweep {
   position: absolute;
-  inset: 0;
+  inset: -1.5px;
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  box-shadow:
-    0 0 0 1px rgb(224 168 75 / 0.6),
-    0 0 24px 3px rgb(224 168 75 / 0.22),
-    inset 0 0 14px rgb(240 190 95 / 0.12);
+  filter: drop-shadow(0 0 3px rgb(240 200 120 / 0.85)) drop-shadow(0 0 10px rgb(224 168 75 / 0.4));
 }
-.nav-glow[data-run="true"] {
-  animation: nav-glow 1.05s ease-out both;
+.nav-sweep::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--sweep),
+    transparent 0deg,
+    transparent 210deg,
+    rgb(236 200 130 / 0) 230deg,
+    rgb(236 200 130 / 0.65) 310deg,
+    #fff3d6 352deg,
+    #ffffff 358deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
 }
-@keyframes nav-glow {
-  0%, 100% { opacity: 0; }
-  12% { opacity: 1; }
-  40% { opacity: 0.35; }
+.nav-sweep[data-run="true"] {
+  animation: nav-sweep-fade 1.3s ease-in-out both;
+}
+.nav-sweep[data-run="true"]::before {
+  animation: nav-sweep-turn 1.3s cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+@keyframes nav-sweep-turn {
+  from { --sweep: 0deg; }
+  to { --sweep: 360deg; }
+}
+@keyframes nav-sweep-fade {
+  0% { opacity: 0; }
+  15%, 75% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* Vertical scan line, used on image reveals, the services swap, the slider and the footer */
