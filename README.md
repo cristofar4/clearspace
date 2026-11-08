@@ -71,7 +71,8 @@ professionals work: top to bottom, dry before wet, finishing at the door.
 
 At each stop:
 
-- a small light travels the route from the garden door and draws it in brass behind it;
+- a small light travels to the stop, leaving a fine trail that fades on arrival, so the photo stays clear at rest
+  (numbered markers carry the order);
 - the camera moves in on the surface (one transform; the numbered markers move with it but never scale);
 - the room dims around the surface and an inspection frame settles on it;
 - a single polish pass crosses the surface;

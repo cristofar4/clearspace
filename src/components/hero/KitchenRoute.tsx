@@ -68,7 +68,8 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   const [active, setActive] = useState<number | null>(null);
-  const [drawn, setDrawn] = useState(-1);
+  /** The segment being travelled right now; shown briefly, then it fades. */
+  const [trail, setTrail] = useState<{ seg: number; key: number } | null>(null);
   const [visited, setVisited] = useState<boolean[]>(() => routeStops.map(() => false));
   const [playing, setPlaying] = useState(false);
   const [complete, setComplete] = useState(false);
@@ -112,14 +113,13 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
     lightRef.current?.setAttribute("transform", `translate(${p.x} ${p.y})`);
   }, []);
 
-  /** Go to a stop. Sequential steps travel the drawn route; jumps glide straight. */
+  /** Go to a stop. Sequential steps travel the route and leave a brief trail; jumps glide straight. */
   const goTo = useCallback(
     (index: number, from: number | null) => {
       travel.current?.stop();
       setActive(index);
       setComplete(false);
       setVisited((v) => v.map((was, i) => was || i === index));
-      setDrawn((d) => Math.max(d, index));
       setPass((n) => n + 1);
       const target = points[index + 1];
       const path = segRefs.current[index];
@@ -127,7 +127,11 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
         placeLight(target);
         return;
       }
+      if (lightRef.current) {
+        animate(lightRef.current, { opacity: [0, 1, 1, 0] }, { duration: TRAVEL_S + 0.7, times: [0, 0.12, 0.8, 1] });
+      }
       if (from === index - 1 && path) {
+        setTrail({ seg: index, key: Date.now() });
         const len = path.getTotalLength();
         travel.current = animate(0, 1, {
           duration: TRAVEL_S,
@@ -256,7 +260,6 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
     setActive(null);
     setComplete(false);
     setVisited(routeStops.map(() => false));
-    setDrawn(-1);
     placeLight(points[0]);
     scan.set(0);
     setPhase("dirty");
@@ -274,7 +277,6 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
     }
     if (complete || active === null) {
       setVisited(routeStops.map(() => false));
-      setDrawn(-1);
       setComplete(false);
       placeLight(points[0]);
       setActive(null);
@@ -420,39 +422,38 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
                 <stop offset="1" stopColor="#E6C88F" stopOpacity="0" />
               </radialGradient>
             </defs>
+            {/* geometry only, used to move the light along the route */}
             {segments.map((d, i) => (
               <path
-                key={`plan-${i}`}
-                d={d}
-                fill="none"
-                stroke="#FBF9F5"
-                strokeOpacity={0.55}
-                strokeWidth={1.4}
-                strokeDasharray="2 5"
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-              />
-            ))}
-            {segments.map((d, i) => (
-              <motion.path
-                key={`done-${i}`}
+                key={`geo-${i}`}
                 ref={(el) => {
                   segRefs.current[i] = el;
                 }}
                 d={d}
                 fill="none"
-                stroke="#D6B88E"
-                strokeWidth={2.4}
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-                initial={false}
-                animate={{ pathLength: i <= drawn ? 1 : 0, opacity: i <= drawn ? 1 : 0 }}
-                transition={{ duration: reduce ? 0 : TRAVEL_S, ease: [0.65, 0, 0.35, 1] }}
+                stroke="none"
               />
             ))}
-            <g ref={lightRef} transform={`translate(${points[0].x} ${points[0].y})`}>
-              <circle r={4.2} fill={`url(#${uid}-glow)`} />
-              <circle r={1.05} fill="#FFF8EC" />
+            {trail && !reduce && (
+              <motion.path
+                key={trail.key}
+                d={segments[trail.seg]}
+                fill="none"
+                stroke="#F4E3BF"
+                strokeWidth={1.6}
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: [0, 0.85, 0.85, 0] }}
+                transition={{
+                  pathLength: { duration: TRAVEL_S, ease: [0.65, 0, 0.35, 1] },
+                  opacity: { duration: TRAVEL_S + 0.9, times: [0, 0.1, 0.65, 1] },
+                }}
+              />
+            )}
+            <g ref={lightRef} opacity={0} transform={`translate(${points[0].x} ${points[0].y})`}>
+              <circle r={3.4} fill={`url(#${uid}-glow)`} />
+              <circle r={0.9} fill="#FFF8EC" />
             </g>
           </svg>
 
@@ -514,16 +515,16 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
               }}
             >
               <span
-                className={`relative grid h-7 w-7 place-items-center rounded-full border text-[0.7rem] font-semibold tabular-nums shadow-[0_6px_16px_-8px_rgba(0,0,0,0.6)] transition-colors duration-300 sm:h-8 sm:w-8 ${
+                className={`relative grid h-6 w-6 place-items-center rounded-full border text-[0.66rem] font-semibold tabular-nums shadow-[0_4px_12px_-6px_rgba(0,0,0,0.55)] transition-colors duration-300 sm:h-7 sm:w-7 sm:text-[0.72rem] ${
                   isActive
                     ? "border-brass-300 bg-petrol-800 text-porcelain-50"
                     : visited[i]
-                      ? "border-porcelain-50/80 bg-porcelain-50 text-petrol-800"
-                      : "border-porcelain-50/70 bg-petrol-900/55 text-porcelain-50 backdrop-blur-sm group-hover:bg-petrol-800"
+                      ? "border-white/70 bg-porcelain-50/85 text-petrol-800 backdrop-blur-sm group-hover:bg-porcelain-50"
+                      : "border-porcelain-50/60 bg-petrol-900/50 text-porcelain-50 backdrop-blur-sm group-hover:bg-petrol-800"
                 }`}
               >
-                {visited[i] && !isActive ? <Icon name="check" size={14} strokeWidth={2.2} /> : i + 1}
-                {isActive && <span className="absolute -inset-[5px] rounded-full border border-brass-300/80" />}
+                {i + 1}
+                {isActive && <span className="absolute -inset-[4px] rounded-full border border-brass-300/80" />}
               </span>
               <span
                 className={`pointer-events-none absolute top-1/2 hidden -translate-y-1/2 whitespace-nowrap rounded-full bg-porcelain-50 px-3 py-1 text-[0.78rem] font-medium text-petrol-900 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.6)] transition-opacity duration-300 md:block ${
@@ -537,7 +538,7 @@ export function KitchenRoute({ onClean }: { onClean?: () => void }) {
         })}
 
         {!reduce && <ScanReadout progress={scan} phase={phase} />}
-        <span className="pointer-events-none absolute bottom-3 left-3 z-10 rounded-full bg-petrol-950/55 px-3 py-1 text-[0.7rem] font-medium tracking-wide text-porcelain-50/90 backdrop-blur-sm">
+        <span className="pointer-events-none absolute bottom-3 right-3 z-10 rounded-full bg-petrol-950/55 px-3 py-1 text-[0.7rem] font-medium tracking-wide text-porcelain-50/90 backdrop-blur-sm">
           A real kitchen
         </span>
         <p className="sr-only" aria-live="polite">
